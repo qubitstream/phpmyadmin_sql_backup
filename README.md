@@ -59,7 +59,7 @@ _Note_: The web interface of phpMyAdmin may change in the future and break this 
 
     phpmyadmin_sql_backup.py "http://www.example.com/phpmyadmin/" your_user your_password
 
-Downloads a plain text `.sql` backup of all tables to the current working directory.
+Downloads a plain text `.sql` backup of all databases to the current working directory.
 
 ---
 

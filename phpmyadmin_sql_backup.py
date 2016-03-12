@@ -31,9 +31,10 @@ import datetime
 
 import grab
 
-__version__ = '2016-03-12.1'
 
-CONTENT_DISPOSITION_FILENAME_RE = re.compile(r'^.*filename="(?P<filename>[^"]+).*$')
+__version__ = '2016-03-12.2'
+
+CONTENT_DISPOSITION_FILENAME_RE = re.compile(r'^.*filename="(?P<filename>[^"]+)".*$')
 DEFAULT_PREFIX_FORMAT = r'%Y-%m-%d--%H-%M-%S-UTC_'
 
 

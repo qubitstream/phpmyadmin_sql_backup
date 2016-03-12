@@ -7,7 +7,7 @@ A Python 3 script to __automate the download of SQL backups via a [phpMyAdmin](h
 
 This is useful when your web hosting provider does not grant you access the the console (for `mysqldump`) but you want to automate the backup of your database (without having to manually use the browser).
 
-It has been tested with Python 3.4+ and phpMyAdmin 4.3.6, 4.5.4.1, 4.7.0-dev
+It has been tested with Python 3.4+ on Linux and Windows and phpMyAdmin 4.3.6, 4.5.4.1 and 4.7.0-dev
 
 _Note_: The web interface of phpMyAdmin may change in the future and break this script. Please file a bug report (including your version of phpMyAdmin) if you encounter this issue.
 

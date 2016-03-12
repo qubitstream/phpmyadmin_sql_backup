@@ -32,13 +32,13 @@ import datetime
 import grab
 
 
-__version__ = '2016-03-12.2'
+__version__ = '2016-03-12.3'
 
 CONTENT_DISPOSITION_FILENAME_RE = re.compile(r'^.*filename="(?P<filename>[^"]+)".*$')
 DEFAULT_PREFIX_FORMAT = r'%Y-%m-%d--%H-%M-%S-UTC_'
 
 
-def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=False, prepend_date=True, basename='',
+def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=False, prepend_date=True, basename=None,
                         output_directory=os.getcwd(), exclude_dbs=None, compression='none', prefix_format=None,
                         timeout=60, **kwargs):
     prefix_format = prefix_format or DEFAULT_PREFIX_FORMAT
@@ -74,7 +74,7 @@ def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=F
             'Could not determine SQL backup filename from {}'.format(g.response.headers['Content-Disposition']))
 
     content_filename = re_match.group('filename')
-    filename = content_filename if not basename else basename + os.path.splitext(content_filename)[1]
+    filename = content_filename if basename is None else basename + os.path.splitext(content_filename)[1]
     if prepend_date:
         prefix = datetime.datetime.utcnow().strftime(prefix_format)
         filename = prefix + filename
@@ -113,8 +113,9 @@ if __name__ == '__main__':
         help='comma-separated list of database names to exclude from the dump')
     parser.add_argument('--compression', default='none', choices=['none', 'zip', 'gzip'],
         help='compression method for the output file - must be supported by the server (default: %(default)s)')
-    parser.add_argument('--basename',
-        help='the desired basename (without extension) of the SQL dump file (default: the name given by phpMyAdmin)')
+    parser.add_argument('--basename', default=None,
+        help='the desired basename (without extension) of the SQL dump file (default: the name given by phpMyAdmin); '
+        'you can also set an empty basename "" in combination with --prepend-date and --prefix-format')
     parser.add_argument('--timeout', type=int, default=60,
         help='timeout in seconds for the requests (default: %(default)s)')
     parser.add_argument('--overwrite-existing', action='store_true', default=False,

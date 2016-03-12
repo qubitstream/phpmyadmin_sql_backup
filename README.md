@@ -42,7 +42,9 @@ _Note_: The web interface of phpMyAdmin may change in the future and break this 
                             compression method for the output file - must be
                             supported by the server (default: none)
       --basename BASENAME   the desired basename (without extension) of the SQL
-                            dump file (default: the name given by phpMyAdmin)
+                            dump file (default: the name given by phpMyAdmin); you
+                            can also set an empty basename "" in combination with
+                            --prepend-date and --prefix-format
       --timeout TIMEOUT     timeout in seconds for the requests (default: 60)
       --overwrite-existing  overwrite existing SQL dump files (instead of
                             appending a number to the name)
@@ -53,7 +55,7 @@ _Note_: The web interface of phpMyAdmin may change in the future and break this 
                             effect
       --dry-run             dry run, do not actually download any file
 
-    Written by Christoph Haunschmidt, version: 2016-03-12.0
+    Written by Christoph Haunschmidt, version: 2016-03-12.3
 
 ### Examples
 
@@ -69,6 +71,7 @@ Downloads a zipped dump with databases `mydb2` & `mydb4` excluded, the base name
 
 ## Requirements
 
+ - A [Python 3.4+](https://www.python.org/) installation on your system
  - [Grab - python web-scraping framework](http://grablib.org/): Install via `pip install -U Grab` or see the [installation instructions](http://docs.grablib.org/en/latest/usage/installation.html) if you run into problems.
 
 ## Changelog

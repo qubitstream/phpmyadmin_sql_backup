@@ -54,6 +54,8 @@ _Note_: The web interface of phpMyAdmin may change in the future and break this 
                             format. Must be used with --prepend-date to be in
                             effect
       --dry-run             dry run, do not actually download any file
+      --http-auth           Basic http authentication, using format
+                            "username:password"
 
     Written by Christoph Haunschmidt, version: 2016-03-12.3
 

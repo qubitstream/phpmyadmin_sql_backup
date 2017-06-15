@@ -40,12 +40,14 @@ DEFAULT_PREFIX_FORMAT = r'%Y-%m-%d--%H-%M-%S-UTC_'
 
 def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=False, prepend_date=True, basename=None,
                         output_directory=os.getcwd(), exclude_dbs=None, compression='none', prefix_format=None,
-                        timeout=60, **kwargs):
+                        timeout=60, http_auth=None, **kwargs):
     prefix_format = prefix_format or DEFAULT_PREFIX_FORMAT
     exclude_dbs = exclude_dbs.split(',') or []
     encoding = '' if compression == 'gzip' else 'gzip'
 
     g = grab.Grab(encoding=encoding, timeout=timeout)
+    if http_auth:
+        g.setup(userpwd=http_auth)
     g.go(url)
 
     g.doc.set_input_by_id('input_username', user)
@@ -125,6 +127,8 @@ if __name__ == '__main__':
                  'Must be used with --prepend-date to be in effect'.format(DEFAULT_PREFIX_FORMAT.replace('%', '%%'))))
     parser.add_argument('--dry-run', action='store_true', default=False,
         help='dry run, do not actually download any file')
+    parser.add_argument('--http-auth', default=None,
+        help='Basic http authentication, using format "username:password"')
 
     args = parser.parse_args()
 

@@ -113,7 +113,7 @@ if __name__ == '__main__':
         help='prepend current UTC date & time to the filename; see the --prefix-format option for custom formatting')
     parser.add_argument('-e', '--exclude-dbs', default='',
         help='comma-separated list of database names to exclude from the dump')
-    parser.add_argument('--compression', default='none', choices=['none', 'zip', 'gzip'],
+    parser.add_argument('--compression', default='none', choices=['none', 'zip', 'gzip', 'bzip2'],
         help='compression method for the output file - must be supported by the server (default: %(default)s)')
     parser.add_argument('--basename', default=None,
         help='the desired basename (without extension) of the SQL dump file (default: the name given by phpMyAdmin); '

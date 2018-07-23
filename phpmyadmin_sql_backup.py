@@ -24,13 +24,12 @@
 # Christoph Haunschmidt 2016-03
 
 import argparse
+import datetime
 import os
 import re
 import sys
-import datetime
 
 import grab
-
 
 __version__ = '2016-03-12.3'
 
@@ -40,7 +39,7 @@ DEFAULT_PREFIX_FORMAT = r'%Y-%m-%d--%H-%M-%S-UTC_'
 
 def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=False, prepend_date=True, basename=None,
                         output_directory=os.getcwd(), exclude_dbs=None, compression='none', prefix_format=None,
-                        timeout=60, http_auth=None, **kwargs):
+                        timeout=60, http_auth=None):
     prefix_format = prefix_format or DEFAULT_PREFIX_FORMAT
     exclude_dbs = exclude_dbs.split(',') or []
     encoding = '' if compression == 'gzip' else 'gzip'
@@ -65,7 +64,7 @@ def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=F
     dbs_to_dump = [db_name for db_name in dbs_available if db_name not in exclude_dbs]
     if not dbs_to_dump:
         print('Warning: no databases to dump (databases available: "{}")'.format('", "'.join(dbs_available)),
-            file=sys.stderr)
+              file=sys.stderr)
 
     file_response = g.submit(
         extra_post=[('db_select[]', db_name) for db_name in dbs_to_dump] + [('compression', compression)])
@@ -108,27 +107,28 @@ if __name__ == '__main__':
     parser.add_argument('user', metavar='USERNAME', help='phpMyAdmin login username')
     parser.add_argument('password', metavar='PASSWORD', help='phpMyAdmin login password')
     parser.add_argument('-o', '--output-directory', default=os.getcwd(),
-        help='output directory for the SQL dump file (default: the current working directory)')
+                        help='output directory for the SQL dump file (default: the current working directory)')
     parser.add_argument('-p', '--prepend-date', action='store_true', default=False,
-        help='prepend current UTC date & time to the filename; see the --prefix-format option for custom formatting')
+                        help='prepend current UTC date & time to the filename; see the --prefix-format option for custom formatting')
     parser.add_argument('-e', '--exclude-dbs', default='',
-        help='comma-separated list of database names to exclude from the dump')
+                        help='comma-separated list of database names to exclude from the dump')
     parser.add_argument('--compression', default='none', choices=['none', 'zip', 'gzip', 'bzip2'],
-        help='compression method for the output file - must be supported by the server (default: %(default)s)')
+                        help='compression method for the output file - must be supported by the server (default: %(default)s)')
     parser.add_argument('--basename', default=None,
-        help='the desired basename (without extension) of the SQL dump file (default: the name given by phpMyAdmin); '
-        'you can also set an empty basename "" in combination with --prepend-date and --prefix-format')
+                        help='the desired basename (without extension) of the SQL dump file (default: the name given by phpMyAdmin); '
+                             'you can also set an empty basename "" in combination with --prepend-date and --prefix-format')
     parser.add_argument('--timeout', type=int, default=60,
-        help='timeout in seconds for the requests (default: %(default)s)')
+                        help='timeout in seconds for the requests (default: %(default)s)')
     parser.add_argument('--overwrite-existing', action='store_true', default=False,
-        help='overwrite existing SQL dump files (instead of appending a number to the name)')
+                        help='overwrite existing SQL dump files (instead of appending a number to the name)')
     parser.add_argument('--prefix-format', default='',
-        help=str('the prefix format for --prepend-date (default: "{}"); in Python\'s strftime format. '
-                 'Must be used with --prepend-date to be in effect'.format(DEFAULT_PREFIX_FORMAT.replace('%', '%%'))))
+                        help=str('the prefix format for --prepend-date (default: "{}"); in Python\'s strftime format. '
+                                 'Must be used with --prepend-date to be in effect'.format(
+                            DEFAULT_PREFIX_FORMAT.replace('%', '%%'))))
     parser.add_argument('--dry-run', action='store_true', default=False,
-        help='dry run, do not actually download any file')
+                        help='dry run, do not actually download any file')
     parser.add_argument('--http-auth', default=None,
-        help='Basic http authentication, using format "username:password"')
+                        help='Basic http authentication, using format "username:password"')
 
     args = parser.parse_args()
 
@@ -143,4 +143,4 @@ if __name__ == '__main__':
         sys.exit(1)
 
     print('{} saved SQL dump to: {}'.format(('Would have' if args.dry_run else 'Successfully'), dump_fn),
-        file=sys.stdout)
+          file=sys.stdout)

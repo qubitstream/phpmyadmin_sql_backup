@@ -37,6 +37,16 @@ CONTENT_DISPOSITION_FILENAME_RE = re.compile(r'^.*filename="(?P<filename>[^"]+)"
 DEFAULT_PREFIX_FORMAT = r'%Y-%m-%d--%H-%M-%S-UTC_'
 
 
+def is_login_successful(g):
+    return g.doc.text_search("frame_content") or g.doc.text_search("server_export.php")
+
+
+def open_frame_if_phpmyadmin_3(g):
+    frame_url_selector = g.doc.select("id('frame_content')/@src")
+    if frame_url_selector.exists():
+        g.go(frame_url_selector.text())
+
+
 def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=False, prepend_date=True, basename=None,
                         output_directory=os.getcwd(), exclude_dbs=None, compression='none', prefix_format=None,
                         timeout=60, http_auth=None):
@@ -53,10 +63,11 @@ def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=F
     g.doc.set_input_by_id('input_password', password)
     g.submit()
 
-    try:
-        g.doc.text_assert('server_export.php')
-    except Exception as e:
+    if not is_login_successful(g):
         raise ValueError('Could not login - did you provide the correct username / password? ({})'.format(e))
+
+    open_frame_if_phpmyadmin_3(g)
+
     export_url = g.doc.select("id('topmenu')//a[contains(@href,'server_export.php')]/@href").text()
     g.go(export_url)
 

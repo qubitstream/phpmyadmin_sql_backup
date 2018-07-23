@@ -52,7 +52,7 @@ def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=F
 
     g.doc.set_input_by_id('input_username', user)
     g.doc.set_input_by_id('input_password', password)
-    g.doc.submit()
+    g.submit()
 
     try:
         g.doc.text_assert('server_export.php')
@@ -67,13 +67,13 @@ def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=F
         print('Warning: no databases to dump (databases available: "{}")'.format('", "'.join(dbs_available)),
             file=sys.stderr)
 
-    file_response = g.doc.submit(
+    file_response = g.submit(
         extra_post=[('db_select[]', db_name) for db_name in dbs_to_dump] + [('compression', compression)])
 
-    re_match = CONTENT_DISPOSITION_FILENAME_RE.match(g.response.headers['Content-Disposition'])
+    re_match = CONTENT_DISPOSITION_FILENAME_RE.match(g.doc.headers['Content-Disposition'])
     if not re_match:
         raise ValueError(
-            'Could not determine SQL backup filename from {}'.format(g.response.headers['Content-Disposition']))
+            'Could not determine SQL backup filename from {}'.format(g.doc.headers['Content-Disposition']))
 
     content_filename = re_match.group('filename')
     filename = content_filename if basename is None else basename + os.path.splitext(content_filename)[1]

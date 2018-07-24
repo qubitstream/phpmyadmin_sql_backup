@@ -64,7 +64,7 @@ def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=F
     g.submit()
 
     if not is_login_successful(g):
-        raise ValueError('Could not login - did you provide the correct username / password? ({})'.format(e))
+        raise ValueError('Could not login - did you provide the correct username / password?')
 
     open_frame_if_phpmyadmin_3(g)
 

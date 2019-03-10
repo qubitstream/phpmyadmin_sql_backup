@@ -40,7 +40,7 @@ DEFAULT_PREFIX_FORMAT = r'%Y-%m-%d--%H-%M-%S-UTC_'
 
 def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=False, prepend_date=True, basename=None,
                         output_directory=os.getcwd(), exclude_dbs=None, compression='none', prefix_format=None,
-                        timeout=60, http_auth=None, **kwargs):
+                        timeout=60, http_auth=None, server_name=None, **kwargs):
     prefix_format = prefix_format or DEFAULT_PREFIX_FORMAT
     exclude_dbs = exclude_dbs.split(',') or []
     encoding = '' if compression == 'gzip' else 'gzip'
@@ -52,6 +52,8 @@ def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=F
 
     g.doc.set_input_by_id('input_username', user)
     g.doc.set_input_by_id('input_password', password)
+    if server_name:
+        g.doc.set_input_by_id('input_servername', server_name)
     g.submit()
 
     try:
@@ -113,6 +115,7 @@ if __name__ == '__main__':
         help='prepend current UTC date & time to the filename; see the --prefix-format option for custom formatting')
     parser.add_argument('-e', '--exclude-dbs', default='',
         help='comma-separated list of database names to exclude from the dump')
+    parser.add_argument('-s', '--server-name', default=None, help='mysql server hostname to supply if enabled as field on login page')
     parser.add_argument('--compression', default='none', choices=['none', 'zip', 'gzip'],
         help='compression method for the output file - must be supported by the server (default: %(default)s)')
     parser.add_argument('--basename', default=None,

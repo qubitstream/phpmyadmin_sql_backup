@@ -38,6 +38,8 @@ _Note_: The web interface of phpMyAdmin may change in the future and break this 
       -e EXCLUDE_DBS, --exclude-dbs EXCLUDE_DBS
                             comma-separated list of database names to exclude from
                             the dump
+      -s SERVER_NAME, --server-name SERVER_NAME
+                            mysql server hostname to supply if enabled as field on login page
       --compression {none,zip,gzip}
                             compression method for the output file - must be
                             supported by the server (default: none)

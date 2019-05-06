@@ -61,5 +61,6 @@ docs/_build/
 target/
 
 .idea
+.vscode
 
 # Created by .ignore support plugin (hsz.mobi)

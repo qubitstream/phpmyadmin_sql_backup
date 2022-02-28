@@ -84,8 +84,8 @@ UTC date / time to the directory `/tmp`, e.g. `/tmp/2016-03-11--15-19-04-UTC_exa
 ## Requirements
 
  - A [Python 3.4+](https://www.python.org/) installation on your system
- - [Grab - python web-scraping framework](http://grablib.org/): Install via `pip install -U Grab` or see 
-   the [installation instructions](http://docs.grablib.org/en/latest/usage/installation.html) if you run into problems.
+ - [Grab - python web-scraping framework](https://github.com/lorien/grab): Install via `pip install -U Grab` or see 
+   the [installation instructions](https://grab.readthedocs.io/en/latest/usage/installation.html) if you run into problems.
 
 __Note for Windows users__: while it is possible to install the requirements natively, it is often easier to use the
 [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) if you are using Windows 10

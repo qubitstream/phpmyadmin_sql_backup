@@ -57,13 +57,13 @@ def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=F
     g = grab.Grab(encoding=encoding, timeout=timeout)
     if http_auth:
         g.setup(userpwd=http_auth)
+    else:
+        g.doc.set_input_by_id('input_username', user)
+        g.doc.set_input_by_id('input_password', password)
+        g.submit()
     g.go(url)
-
-    g.doc.set_input_by_id('input_username', user)
-    g.doc.set_input_by_id('input_password', password)
     if server_name:
         g.doc.set_input_by_id('input_servername', server_name)
-    g.submit()
 
     if not is_login_successful(g):
         raise ValueError('Could not login - did you provide the correct username / password?')

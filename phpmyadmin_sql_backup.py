@@ -38,7 +38,7 @@ DEFAULT_PREFIX_FORMAT = r'%Y-%m-%d--%H-%M-%S-UTC_'
 
 
 def is_login_successful(g):
-    return g.doc.text_search("frame_content") or g.doc.text_search("server_export.php")
+    return any(g.doc.text_search(s) for s in ["frame_content", "server_export.php", "index.php?route=/server/export"])
 
 
 def open_frame_if_phpmyadmin_3(g):
@@ -70,7 +70,11 @@ def download_sql_backup(url, user, password, dry_run=False, overwrite_existing=F
 
     open_frame_if_phpmyadmin_3(g)
 
-    export_url = g.doc.select("id('topmenu')//a[contains(@href,'server_export.php')]/@href").text()
+    old_export_url_selector = g.doc.select("id('topmenu')//a[contains(@href,'server_export.php')]/@href")
+    if old_export_url_selector.exists():
+        export_url = old_export_url_selector.text()
+    else:
+        export_url = g.doc.select("id('topmenu')//a[contains(@href,'index.php?route=/server/export')]/@href").text()
     g.go(export_url)
 
     dbs_available = [option.attrib['value'] for option in g.doc.form.inputs['db_select[]']]
